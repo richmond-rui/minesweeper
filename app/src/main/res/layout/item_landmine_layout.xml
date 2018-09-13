@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:padding="1dp"
+    android:layout_height="40dp">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@mipmap/ic_launcher"
+        />
+    <Button
+        android:id="@+id/btn_mine"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="1"
+        android:textColor="@android:color/holo_red_light"
+        android:background="@drawable/bg_landmine_btn"
+        />
+
+</FrameLayout>
