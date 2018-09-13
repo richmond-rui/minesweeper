@@ -59,22 +59,27 @@ public class MainRecyclerviewAdapter extends RecyclerView.Adapter<MainRecyclervi
         myViewHolder.button.setEnabled(false);
 
         if (landMineBeans.get(i).isOpen()){
+            //如果该方块已经被点开
             int landMineSize=getOtherLandMineSize(i);
             if (landMineSize==0){
+                //如果周围没有雷，则显示白色
                 myViewHolder.button.setText("");
                 myViewHolder.button.setEnabled(false);
             }else {
+                //如果有雷，则显示雷的数量
                 myViewHolder.button.setText(""+landMineSize);
                 myViewHolder.button.setEnabled(true);
             }
-
+                //点开后统一背景色为白色
             myViewHolder.button.setBackgroundColor(context.getResources().getColor(android.R.color.white));
+            //暂时没用到，占坑
             if (landMineBeans.get(i).isLandMine()){
                 myViewHolder.button.setVisibility(View.GONE);
             }else {
                 myViewHolder.button.setVisibility(View.VISIBLE);
             }
         }else {
+            //如果该方块没有被点开，则统一显示
             myViewHolder.button.setText("蓝");
             myViewHolder.button.setBackgroundColor(context.getResources().getColor(android.R.color.darker_gray));
             myViewHolder.button.setEnabled(true);
@@ -111,6 +116,11 @@ public class MainRecyclerviewAdapter extends RecyclerView.Adapter<MainRecyclervi
         return landMineSize;
     }
 
+    /**
+     * 自动打开周围的点
+     * @param x
+     * @param y
+     */
     private void openOtherPos(final int x, final int y){
 
         if (x<0||x>=width){
@@ -157,21 +167,19 @@ public class MainRecyclerviewAdapter extends RecyclerView.Adapter<MainRecyclervi
 //        senMsg(x,y+1);
     }
 
-    private void senMsg(int x, int y) {
-        Message message=new Message();
-        message.arg1=x;
-        message.arg2=y;
-        message.what=0;
-        handler.sendMessage(message);
-    }
-
+    /**
+     * 判断用户是否胜利
+     * @return
+     */
     public boolean checkIsWin(){
         int notOpenSize=0;
+        //计算剩余没点方块数量
         for (LandMineBean landMineBean:landMineBeans){
             if (!landMineBean.isOpen()){
                 notOpenSize++;
             }
         }
+        //如果没点的方块数量等于雷的数量，则胜利
         if (notOpenSize==landMineSize){
             return true;
         }
@@ -196,10 +204,13 @@ public class MainRecyclerviewAdapter extends RecyclerView.Adapter<MainRecyclervi
             int pos= (int) itemView.getTag();
             if (!landMineBeans.get(pos).isOpen()){
                 if (landMineBeans.get(pos).isLandMine()){
+                    //如果点到雷，直接判定失败
                     onWinLister.winLister(false);
                     return;
                 }
+                //自动打开附近的未点开的白块
                 openOtherPos(pos%width,pos/width);
+                //刷新
                 MainRecyclerviewAdapter.this.notifyDataSetChanged();
                 if (checkIsWin()){
                     onWinLister.winLister(true);
